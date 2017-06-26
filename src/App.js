@@ -4,6 +4,8 @@ import Howler, { Howl } from 'howler'
 import ReactHowler from 'react-howler'
 
 
+
+// SwapSource is the main component
 class SwapSource extends React.Component {
   constructor (props) {
     super(props)
@@ -80,10 +82,6 @@ class SwapSource extends React.Component {
 }
 
 
-/*
-  . Something beautiful
-  . MusicController class
-*/
 class MusicControls extends React.Component {
   constructor(props) {
     super(props)
@@ -111,6 +109,7 @@ class PlayListView extends React.Component {
     </div>
   }
 }
+
 
 class App extends React.Component {
   constructor(props){
