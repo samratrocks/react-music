@@ -70,3 +70,14 @@
   margin-right: 40px;
   cursor: pointer;
 }
+
+.items h1, .items p, .items button {
+  text-align: left;
+  margin-left: 20px;
+  margin-right: 0px;
+}
+
+.current {
+  background: red;
+  color: blue;
+}
