@@ -2,7 +2,31 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import Howler, { Howl } from 'howler'
 import ReactHowler from 'react-howler'
+import PlaylistComponent from './playlist'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
+
+/* 
+Structure:  
+Todo next (in no particular order):
+ 1. Divide up into smaller components
+ 2. Clean out / refactor
+ 3. Add animation
+ 4. Add in external links and event handling ( √ )
+ 5. Add a new playlist component that shows all the songs ( √ )
+  - How to import a component in React js ( √ )
+ 6. Add functionality to remove items from the playlist ( √ )
+ 7. Dont add the same track twice ( √ )
+
+Solved Issues:
+ 1. Wrong item is popped off the stack 
+
+Bugs:
+ 1. Dosen't skip if same track added twice
+  Explanation:
+  (!)  State doesn't change since Howler gets props using the source file, so if the same 
+    file is passed twice, howler refuses to change songs.
+*/
 
 
 // SwapSource is the main component
@@ -13,20 +37,33 @@ class SwapSource extends React.Component {
     this.state = {
       currentSrcIndex: 0,
       playing: false,
-      sources: [
-        {name: 'MCR', src: 'https://cdn.shopify.com/s/files/1/0543/1257/t/30/assets/mcr.mp3'}, 
-        {name: 'Wierf', src: 'http://www.noiseaddicts.com/samples_1w72b820/4629.mp3'},
-        {name: 'Whuf', src: 'http://www.noiseaddicts.com/samples_1w72b820/2541.mp3'}]
+      sources: [{name: 'MCR', src: 'https://cdn.shopify.com/s/files/1/0543/1257/t/30/assets/mcr.mp3'}]
     }
     
-    this.handleSwap = this.handleSwap.bind(this) 
+    this.handleSwap = this.handleSwap.bind(this)
     this.handlePlay = this.handlePlay.bind(this)
     this.previousTrack = this.previousTrack.bind(this)
     this.skipForward = this.skipForward.bind(this)
     this.skipBackward = this.skipBackward.bind(this)
-    
+    this.songClicked = this.songClicked.bind(this)
   }
 
+  componentDidMount() {
+    let songsNodes = document.querySelectorAll(".song")     // Returns a Nodelist which is not an array
+    let songs = Array.prototype.slice.call(songsNodes)     // Convert nodeList into array
+    
+    songs.map((item) => {
+      item.addEventListener("click", (e) => {
+        
+        let dataSrc= e.target.attributes["data-src"].nodeValue
+        let dataName = e.target.attributes["data-name"].nodeValue
+        let lastSong = this.state.sources[this.state.sources.length - 1].src
+        if (lastSong !== dataSrc ) { this.setState({sources: this.state.sources.concat({name: dataName, src: dataSrc})}) }
+        else { console.log("[DEV]: Song already in the playlist. Add a good user feedback for this.") }
+      })
+    })
+  }
+  
   handleSwap () {
     // Get the numbers of song and move on to the next song
     let numberOfTracks = this.state.sources.length
@@ -59,6 +96,18 @@ class SwapSource extends React.Component {
     if (currentPosition - 5 < 0) { this.player.seek(0) }
     if (!(currentPosition - 5 < 0)) { this.player.seek(currentPosition - 5) }
   }
+  
+  songClicked(e) {
+    // should remove the song
+    console.log(e.target)
+    let key = e.target.attributes['data-id'].nodeValue
+    let tempState = this.state.sources
+    if (tempState.length !== 1) { 
+      tempState.splice(key - 1, 1)
+      this.setState({sources: tempState})
+      console.dir(tempState)
+    }
+  }
 
   render () {
     return (
@@ -67,7 +116,8 @@ class SwapSource extends React.Component {
         <ReactHowler
           playing={this.state.playing}
           src={this.state.sources[this.state.currentSrcIndex].src}
-          onEnd={this.handleSwap} 
+          current={this.state.currentSrcIndex}
+          onEnd={this.handleSwap}
           ref={(ref) => (this.player = ref) } />
 
           <h1 onClick={this.previousTrack}>Previous Track</h1>
@@ -75,38 +125,10 @@ class SwapSource extends React.Component {
           <div><span onClick={this.skipBackward}>&laquo;</span> <span onClick={this.skipForward}>&raquo;</span></div>
           <h1 onClick={this.handleSwap}>Skip Track</h1>
           <p>Currently playing {this.state.sources[this.state.currentSrcIndex].name }</p>
+          <PlaylistComponent list={this.state.sources} current={this.state.currentSrcIndex} songClicked={this.songClicked}/>
         </div>
       </div>
     )
-  }
-}
-
-
-class MusicControls extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  
-  render() {
-    return <p>Under Construction</p>
-  }
-}
-
-class PlayListView extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  
-  render() {
-    let list = this.props.playlist.map((item) => {
-      return <li>{item.name}</li>
-    })
-    // will map given prop into list items
-    return <div className="playlistView">
-      <ol>
-        {list}
-      </ol>
-    </div>
   }
 }
 
