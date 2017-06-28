@@ -29,15 +29,23 @@ Bugs:
 */
 
 
+// What components can I split this into...?
+// 1. Get it hosted
+// 2. 
+
 // SwapSource is the main component
 class SwapSource extends React.Component {
   constructor (props) {
     super(props)
+    
+    /* Let's write some comments */
 
     this.state = {
       currentSrcIndex: 0,
       playing: false,
-      sources: [{name: 'MCR', src: 'https://cdn.shopify.com/s/files/1/0543/1257/t/30/assets/mcr.mp3'}]
+      sources: [{name: 'MCR', src: 'https://cdn.shopify.com/s/files/1/0543/1257/t/30/assets/mcr.mp3'}],
+      visible: false,
+      minimized: false
     }
     
     this.handleSwap = this.handleSwap.bind(this)
@@ -60,6 +68,9 @@ class SwapSource extends React.Component {
         let lastSong = this.state.sources[this.state.sources.length - 1].src
         if (lastSong !== dataSrc ) { this.setState({sources: this.state.sources.concat({name: dataName, src: dataSrc})}) }
         else { console.log("[DEV]: Song already in the playlist. Add a good user feedback for this.") }
+        
+        
+        if (!this.state.visible) this.setState({visible: true})
       })
     })
   }
@@ -111,7 +122,7 @@ class SwapSource extends React.Component {
 
   render () {
     return (
-      <div>      
+      <div className={this.state.visible ? "visible" : "hidden" }>      
         <div className="swapplayer">
         <ReactHowler
           playing={this.state.playing}
@@ -139,7 +150,7 @@ class App extends React.Component {
   }
   
   render() {
-    return <div className="app"> 
+    return <div className="app" > 
       <SwapSource />
     </div>
   }

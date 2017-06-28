@@ -24,6 +24,7 @@ class PlaylistComponent extends Component {
       // Problem Spot
       return <li className={isCurrent} key={key} data-id={key} onClick={(e) => {this.props.songClicked(e)} }>{item.name}</li>
     })
+    
     return <div>
       <h3>Queue:</h3>
         <ol>
