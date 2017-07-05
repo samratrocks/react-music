@@ -17,3 +17,4 @@ Future Plans:
 - Playlist will be added using JSON files, so that the script that makes the playlist will be different from the actual music app.
 
 See the demo at: https://endurable-agreement.glitch.me/
+
