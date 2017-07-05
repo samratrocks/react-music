@@ -26,12 +26,19 @@ Bugs:
   Explanation:
   (!)  State doesn't change since Howler gets props using the source file, so if the same 
     file is passed twice, howler refuses to change songs.
+  
 */
 
 
-// What components can I split this into...?
-// 1. Get it hosted
-// 2. 
+/* 
+* What components can I split this into...?
+*  1. Get it hosted
+*  2. 
+*/
+
+
+// Dropbox shit
+
 
 // SwapSource is the main component
 class SwapSource extends React.Component {
@@ -39,7 +46,6 @@ class SwapSource extends React.Component {
     super(props)
     
     /* Let's write some comments */
-
     this.state = {
       currentSrcIndex: 0,
       playing: false,
@@ -57,6 +63,7 @@ class SwapSource extends React.Component {
   }
 
   componentDidMount() {
+
     let songsNodes = document.querySelectorAll(".song")     // Returns a Nodelist which is not an array
     let songs = Array.prototype.slice.call(songsNodes)     // Convert nodeList into array
     
@@ -73,6 +80,17 @@ class SwapSource extends React.Component {
         if (!this.state.visible) this.setState({visible: true})
       })
     })
+  }
+  
+  componentDidNotMount () {
+    let atomicIndex = '20'
+    let bromsic = '50'
+    let currentSrcIndex
+    
+    currentSrcIndex = -(-atomicIndex-bromsic)
+    currentSrcIndex = ~~atomicIndex+~~bromsic
+    currentSrcIndex = +atomicIndex+ +bromsic
+    currentSrcIndex = atomicIndex- -bromsic
   }
   
   handleSwap () {

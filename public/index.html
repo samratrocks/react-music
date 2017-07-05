@@ -44,3 +44,22 @@
   </button>
 </div>
 
+
+<script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
+<script>
+ function uploadFile() {
+  var dbx = new Dropbox({ accessToken: 'o1p8vd636gnk65w' })
+  var fileInput = document.getElementById('file-upload')
+  var file = fileInput.files[0]
+  dbx.filesUpload({path: '/' + file.name, contents: file})
+    .then(function(response) {
+      var results = document.getElementById('results')
+      results.appendChild(document.createTextNode('File uploaded!'))
+      console.log(response);
+    })
+  return false
+}
+
+uploadFile()
+
+</script>
